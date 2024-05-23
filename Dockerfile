@@ -1,4 +1,4 @@
-FROM maven:4.0.0-openjdk-17 AS build
+FROM maven:4.0.0-openjdk-22 AS build
 
 WORKDIR /app
 
@@ -8,11 +8,11 @@ COPY ./src /app/src
 
 RUN mvn clean package -Dmaven.test.skip=true
 
-FROM openjdk:17-jdk
+FROM openjdk:22-jdk
 
 WORKDIR /app
 
-COPY --from=build /app/target/\*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 

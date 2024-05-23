@@ -1,4 +1,4 @@
-FROM maven:4.0.0-openjdk-22 AS build
+FROM maven:4.0.0-openjdk-21 AS build
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY ./src /app/src
 
 RUN mvn clean package -Dmaven.test.skip=true
 
-FROM openjdk:22-jdk
+FROM openjdk:21-jdk
 
 WORKDIR /app
 

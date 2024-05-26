@@ -1,5 +1,6 @@
 package com.project.vetProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,8 @@ public class Appointment {
     @ManyToOne()
     @JoinColumn(name = "appointment_doctor_id", referencedColumnName = "doctor_id")
     private Doctor doctor;
+
+    @OneToOne(mappedBy = "appointment")
+    @JsonIgnore
+    private Report report;
 }

@@ -28,7 +28,7 @@ public class CustomerController {
     public ResultData<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest customerSaveRequest){
         return this.customerService.save(customerSaveRequest);
     }
-    @PutMapping()
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest){
         return this.customerService.update(customerUpdateRequest);
@@ -50,5 +50,10 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<CustomerResponse>> get(@PathVariable("name") String name){
         return this.customerService.findByName(name);
+    }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> get(@PathVariable("id") int id){
+        return this.customerService.getById(id);
     }
 }

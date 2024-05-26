@@ -13,6 +13,7 @@ import java.util.List;
 public interface ICustomerService {
     ResultData<CustomerResponse> save(CustomerSaveRequest customerSaveRequest);
     Customer get(int id);
+    ResultData<CustomerResponse> getById(int id);
     ResultData<CursorResponse<CustomerResponse>> cursor(int page, int pageSize);
     ResultData<CustomerResponse> update(CustomerUpdateRequest customerUpdateRequest);
     ResultData<List<CustomerResponse>> findByName(String name);

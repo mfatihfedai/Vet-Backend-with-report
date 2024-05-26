@@ -1,6 +1,6 @@
 package com.project.vetProject.dto.request.vaccine;
 
-import com.project.vetProject.entity.Animal;
+import com.project.vetProject.entity.Report;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,4 +21,5 @@ public class VaccineSaveRequest {
     @NotNull(message = "Aşı bitiş tarihi boş olamaz")
     private LocalDate protectionFnshDate;
     private Integer animalId;
+    private Report report;
 }

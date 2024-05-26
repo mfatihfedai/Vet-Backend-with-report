@@ -50,6 +50,13 @@ public class CustomerManager implements ICustomerService {
     }
 
     @Override
+    public ResultData<CustomerResponse> getById(int id) {
+        Customer customer = this.get(id);
+        Customer getCustomer = this.modelMapperService.forRequest().map(customer, Customer.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(getCustomer, CustomerResponse.class));
+    }
+
+    @Override
     public ResultData<CursorResponse<CustomerResponse>> cursor(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Customer> customerPage = this.customerRepo.findAll(pageable);

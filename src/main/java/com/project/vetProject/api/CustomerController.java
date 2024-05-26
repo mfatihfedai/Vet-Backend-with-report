@@ -1,7 +1,6 @@
 package com.project.vetProject.api;
 
 import com.project.vetProject.business.abstracts.ICustomerService;
-import com.project.vetProject.core.config.modelMapper.IModelMapperService;
 import com.project.vetProject.core.result.Result;
 import com.project.vetProject.core.result.ResultData;
 import com.project.vetProject.core.utilies.ResultHelper;
@@ -9,10 +8,8 @@ import com.project.vetProject.dto.CursorResponse;
 import com.project.vetProject.dto.request.customer.CustomerSaveRequest;
 import com.project.vetProject.dto.request.customer.CustomerUpdateRequest;
 import com.project.vetProject.dto.response.customer.CustomerResponse;
-import com.project.vetProject.entity.Customer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,14 +43,14 @@ public class CustomerController {
         this.customerService.delete(id);
         return ResultHelper.ok();
     }
-    @GetMapping("/{name}")
+    @GetMapping("/by-names/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<CustomerResponse>> get(@PathVariable("name") String name){
+    public ResultData<List<CustomerResponse>> getByName(@PathVariable("name") String name){
         return this.customerService.findByName(name);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> get(@PathVariable("id") int id){
+    public ResultData<CustomerResponse> getById(@PathVariable("id") int id){
         return this.customerService.getById(id);
     }
 }

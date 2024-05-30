@@ -20,4 +20,5 @@ public interface IAnimalService {
     List<Animal> findByNameAndSpeciesAndBreedAndGender(String name,String species,String breed,String gender);
     ResultData<AnimalResponse> update(AnimalUpdateRequest animalUpdateRequest);
     boolean delete(int id);
+    ResultData<AnimalResponse> getById(int id);
 }

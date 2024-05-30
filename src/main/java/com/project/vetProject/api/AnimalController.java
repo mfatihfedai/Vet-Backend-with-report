@@ -48,7 +48,7 @@ public class AnimalController {
         this.animalService.delete(id);
         return ResultHelper.ok();
     }
-    @GetMapping("/{name}")
+    @GetMapping("/by-name/{name}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AnimalResponse>> get(@PathVariable("name") String name){
         return this.animalService.findByName(name);
@@ -57,5 +57,10 @@ public class AnimalController {
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AnimalResponse>> getAnimalsByCustomerId(@PathVariable("id") int customerId){
         return this.animalService.findByCustomerId(customerId);
+    }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AnimalResponse> getById(@PathVariable("id") int id){
+        return this.animalService.getById(id);
     }
 }

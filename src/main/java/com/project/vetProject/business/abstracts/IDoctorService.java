@@ -19,4 +19,5 @@ public interface IDoctorService {
     boolean delete(int id);
     List<Doctor> findByIdAndAvailableDateDate(int id, LocalDate localDate);
     List<Doctor> findByNameAndMailAndPhone(String name, String mail, String phone);
+    ResultData<DoctorResponse> getById(int id);
 }

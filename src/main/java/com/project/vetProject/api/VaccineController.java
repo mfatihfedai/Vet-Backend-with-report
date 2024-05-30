@@ -63,4 +63,9 @@ public class VaccineController {
             ){
         return this.vaccineService.findByDate(entryDate,exitDate);
     }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<VaccineResponse> getVaccineById(@PathVariable int id){
+        return this.vaccineService.getById(id);
+    }
 }

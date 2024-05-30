@@ -13,4 +13,5 @@ public interface IReportService {
     ResultData<CursorResponse<ReportResponse>> cursor(int page, int pageSize);
     ResultData<ReportResponse> update(ReportUpdateRequest reportUpdateRequest);
     boolean delete(int id);
+    ResultData<ReportResponse> getById(int id);
 }

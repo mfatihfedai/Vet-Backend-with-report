@@ -1,6 +1,7 @@
 package com.project.vetProject.api;
 
 import com.project.vetProject.business.abstracts.IAvailableDateService;
+import com.project.vetProject.business.abstracts.IDoctorService;
 import com.project.vetProject.core.config.modelMapper.IModelMapperService;
 import com.project.vetProject.core.result.Result;
 import com.project.vetProject.core.result.ResultData;
@@ -10,17 +11,21 @@ import com.project.vetProject.dto.request.availableDate.AvailableDateSaveRequest
 import com.project.vetProject.dto.request.availableDate.AvailableDateUpdateRequest;
 import com.project.vetProject.dto.response.availableDate.AvailableDateResponse;
 import com.project.vetProject.entity.AvailableDate;
+import com.project.vetProject.entity.Doctor;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/available-dates")
 @RequiredArgsConstructor
 public class AvailableDateController {
     private final IAvailableDateService availableDateService;
+    private final IDoctorService doctorService;
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest){
@@ -43,5 +48,16 @@ public class AvailableDateController {
     public Result delete(@PathVariable int id){
         this.availableDateService.delete(id);
         return ResultHelper.ok();
+    }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AvailableDateResponse> get(@PathVariable int id){
+        return this.availableDateService.getById(id);
+    }
+    @GetMapping("/doctor/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AvailableDateResponse>> getByDoctor(@PathVariable int id){
+        Doctor doctor = this.doctorService.get(id);
+        return this.availableDateService.findByDoctor(doctor);
     }
 }

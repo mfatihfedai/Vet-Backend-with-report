@@ -55,4 +55,11 @@ public class ReportManager implements IReportService {
         this.reportRepo.delete(report);
         return true;
     }
+
+    @Override
+    public ResultData<ReportResponse> getById(int id) {
+        Report report = this.get(id);
+        Report updateReport = this.modelMapperService.forRequest().map(report, Report.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateReport, ReportResponse.class));
+    }
 }

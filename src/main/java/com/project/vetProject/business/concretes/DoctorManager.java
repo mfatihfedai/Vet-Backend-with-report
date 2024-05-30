@@ -75,4 +75,11 @@ public class DoctorManager implements IDoctorService {
     public List<Doctor> findByNameAndMailAndPhone(String name, String mail, String phone) {
         return this.doctorRepo.findByNameAndMailAndPhone(name, mail, phone);
     }
+
+    @Override
+    public ResultData<DoctorResponse> getById(int id) {
+        Doctor doctor = this.get(id);
+        Doctor updateDoctor = this.modelMapperService.forRequest().map(doctor, Doctor.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateDoctor, DoctorResponse.class));
+    }
 }

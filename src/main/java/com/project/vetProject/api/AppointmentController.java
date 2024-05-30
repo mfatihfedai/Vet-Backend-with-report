@@ -55,7 +55,7 @@ public class AppointmentController {
         this.appointmentService.delete(id);
         return ResultHelper.ok();
     }
-    @GetMapping("/filterByDrDate/{doctorId}-{findByDate}")
+    @GetMapping("/filterByDrDate/{doctorId}")
     public ResultData<List<AppointmentResponse>> getDoctorIdAndDate(
             @PathVariable("doctorId") int id,
             @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
@@ -64,7 +64,7 @@ public class AppointmentController {
         return this.appointmentService.findByDoctorIdAndDateTimeBetween(id,entryDate,exitDate);
     }
 
-    @GetMapping("/filterByAnmlDate/{animalId}-{findByDate}")
+    @GetMapping("/filterByAnmlDate/{animalId}")
     public ResultData<List<AppointmentResponse>> getAnimalIdAndDate(
             @PathVariable("animalId") int id,
             @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
@@ -73,4 +73,9 @@ public class AppointmentController {
         return this.appointmentService.findByAnimalIdAndDateTimeBetween(id, entryDate, exitDate);
     }
 
+     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AppointmentResponse> getById(@PathVariable int id){
+        return this.appointmentService.getById(id);
+     }
 }

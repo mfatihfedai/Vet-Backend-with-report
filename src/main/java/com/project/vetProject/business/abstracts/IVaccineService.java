@@ -20,4 +20,5 @@ public interface IVaccineService {
     List<Vaccine> findByCodeAndName(String code, String name);
     ResultData<VaccineResponse> update(VaccineUpdateRequest vaccineUpdateRequest);
     boolean delete(int id);
+    ResultData<VaccineResponse> getById(int id);
 }

@@ -1,6 +1,8 @@
 package com.project.vetProject.business.concretes;
 
 import com.project.vetProject.business.abstracts.IAvailableDateService;
+import com.project.vetProject.business.abstracts.IDoctorService;
+import com.project.vetProject.core.config.ConvertEntityToResponse;
 import com.project.vetProject.core.config.modelMapper.IModelMapperService;
 import com.project.vetProject.core.exception.DataAlreadyExistException;
 import com.project.vetProject.core.exception.NotFoundException;
@@ -11,8 +13,11 @@ import com.project.vetProject.dao.AvailableDateRepo;
 import com.project.vetProject.dto.CursorResponse;
 import com.project.vetProject.dto.request.availableDate.AvailableDateSaveRequest;
 import com.project.vetProject.dto.request.availableDate.AvailableDateUpdateRequest;
+import com.project.vetProject.dto.response.animal.AnimalResponse;
 import com.project.vetProject.dto.response.availableDate.AvailableDateResponse;
+import com.project.vetProject.entity.Animal;
 import com.project.vetProject.entity.AvailableDate;
+import com.project.vetProject.entity.Doctor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AvailableDateManager implements IAvailableDateService {
+    private final ConvertEntityToResponse<AvailableDate, AvailableDateResponse> convert;
     private final AvailableDateRepo availableDateRepo;
     private final IModelMapperService modelMapperService;
 
@@ -64,5 +70,19 @@ public class AvailableDateManager implements IAvailableDateService {
         AvailableDate availableDate = this.get(id);
         this.availableDateRepo.delete(availableDate);
         return true;
+    }
+
+    @Override
+    public ResultData<AvailableDateResponse> getById(int id) {
+        AvailableDate availableDate = this.get(id);
+        AvailableDateResponse updateAvailableDate = modelMapperService.forResponse().map(availableDate, AvailableDateResponse.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateAvailableDate, AvailableDateResponse.class));
+    }
+
+    @Override
+    public ResultData<List<AvailableDateResponse>> findByDoctor(Doctor doctor) {
+        List<AvailableDate> availableDateList = this.availableDateRepo.findByDoctor(doctor);
+        List<AvailableDateResponse> availableDateResponseList = this.convert.convertToResponseList(availableDateList, AvailableDateResponse.class);
+        return ResultHelper.success(availableDateResponseList);
     }
 }

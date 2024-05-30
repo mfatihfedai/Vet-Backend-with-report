@@ -46,4 +46,9 @@ public class DoctorController {
         this.doctorService.delete(id);
         return ResultHelper.ok();
     }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<DoctorResponse> get(@PathVariable("id") int id){
+        return this.doctorService.getById(id);
+    }
 }

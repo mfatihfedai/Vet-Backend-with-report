@@ -25,7 +25,7 @@ public class CustomerController {
     public ResultData<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest customerSaveRequest){
         return this.customerService.save(customerSaveRequest);
     }
-    @PutMapping("/{id}")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest){
         return this.customerService.update(customerUpdateRequest);

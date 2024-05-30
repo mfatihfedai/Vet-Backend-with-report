@@ -132,4 +132,11 @@ public class AppointmentManager implements IAppointmentService {
     public Optional<Appointment> findByValueForValid(LocalDateTime dateTime, Integer doctorId, Integer animalId) {
         return this.appointmentRepo.findByDateTimeAndDoctorIdAndAnimalId(dateTime, doctorId, animalId);
     }
+
+    @Override
+    public ResultData<AppointmentResponse> getById(int id) {
+        Appointment appointment = this.get(id);
+        Appointment updateAppointment = this.modelMapperService.forRequest().map(appointment, Appointment.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateAppointment, AppointmentResponse.class));
+    }
 }

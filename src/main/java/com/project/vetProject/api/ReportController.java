@@ -45,4 +45,9 @@ public class ReportController {
         this.reportService.delete(id);
         return ResultHelper.ok();
     }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<ReportResponse> get(@PathVariable("id") int id){
+        return this.reportService.getById(id);
+    }
 }

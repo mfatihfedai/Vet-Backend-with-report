@@ -96,6 +96,14 @@ public class VaccineManager implements IVaccineService {
         this.vaccineRepo.delete(vaccine);
         return true;
     }
+
+    @Override
+    public ResultData<VaccineResponse> getById(int id) {
+        Vaccine vaccine = this.get(id);
+        Vaccine updateVaccine = this.modelMapperService.forRequest().map(vaccine, Vaccine.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateVaccine, VaccineResponse.class));
+    }
+
     public boolean isTrue(){
         return true;
     }

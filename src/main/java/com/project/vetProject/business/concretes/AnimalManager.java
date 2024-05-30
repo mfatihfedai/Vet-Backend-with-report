@@ -95,4 +95,11 @@ public class AnimalManager implements IAnimalService {
         this.animalRepo.delete(animal);
         return true;
     }
+
+    @Override
+    public ResultData<AnimalResponse> getById(int id) {
+        Animal animal = this.get(id);
+        Animal updateAnimal = this.modelMapperService.forRequest().map(animal, Animal.class);
+        return ResultHelper.success(this.modelMapperService.forResponse().map(updateAnimal, AnimalResponse.class));
+    }
 }

@@ -16,7 +16,7 @@ public interface ICustomerService {
     ResultData<CustomerResponse> getById(int id);
     ResultData<CursorResponse<CustomerResponse>> cursor(int page, int pageSize);
     ResultData<CustomerResponse> update(CustomerUpdateRequest customerUpdateRequest);
-    ResultData<List<CustomerResponse>> findByName(String name);
+    ResultData<List<CustomerResponse>> findByName(String name, int page, int pageSize);
     List<Customer> findByNameAndMailAndPhone(String name, String mail, String phone);
     boolean delete(int id);
 }

@@ -19,8 +19,6 @@ public class AppointmentUpdateRequest {
     private int id;
 
     @NotNull(message = "Randevu tarihi boş olamaz")
-    @JsonFormat(pattern = "dd.MM.yyyy HH:00", shape = JsonFormat.Shape.STRING)
-    @Schema(example = "01.01.2024 14:00")
     private LocalDateTime dateTime;
 
     @Positive(message = "Hayvan ID pozitif olmalı")

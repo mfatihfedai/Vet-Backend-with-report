@@ -61,7 +61,7 @@ public class AvailableDateManager implements IAvailableDateService {
     @Override
     public ResultData<AvailableDateResponse> update(AvailableDateUpdateRequest availableDateUpdateRequest) {
         this.get(availableDateUpdateRequest.getId());
-        AvailableDate updateAvailableDate = this.modelMapperService.forResponse().map(availableDateUpdateRequest, AvailableDate.class);
+        AvailableDate updateAvailableDate = this.modelMapperService.forRequest().map(availableDateUpdateRequest, AvailableDate.class);
         return ResultHelper.success(this.modelMapperService.forResponse().map(this.availableDateRepo.save(updateAvailableDate), AvailableDateResponse.class));
     }
 
@@ -75,13 +75,17 @@ public class AvailableDateManager implements IAvailableDateService {
     @Override
     public ResultData<AvailableDateResponse> getById(int id) {
         AvailableDate availableDate = this.get(id);
-        AvailableDateResponse updateAvailableDate = modelMapperService.forResponse().map(availableDate, AvailableDateResponse.class);
+        AvailableDateResponse updateAvailableDate = modelMapperService.forRequest().map(availableDate, AvailableDateResponse.class);
         return ResultHelper.success(this.modelMapperService.forResponse().map(updateAvailableDate, AvailableDateResponse.class));
     }
 
     @Override
     public ResultData<List<AvailableDateResponse>> findByDoctor(Doctor doctor) {
+
         List<AvailableDate> availableDateList = this.availableDateRepo.findByDoctor(doctor);
+        if(availableDateList.isEmpty()){
+            return ResultHelper.error("Doctor is not found");
+        }
         List<AvailableDateResponse> availableDateResponseList = this.convert.convertToResponseList(availableDateList, AvailableDateResponse.class);
         return ResultHelper.success(availableDateResponseList);
     }

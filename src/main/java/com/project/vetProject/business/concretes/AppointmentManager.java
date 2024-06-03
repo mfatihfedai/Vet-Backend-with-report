@@ -42,7 +42,6 @@ public class AppointmentManager implements IAppointmentService {
     public ResultData<AppointmentResponse> save(AppointmentSaveRequest appointmentSaveRequest) {
         //LocalDateTime dakikalar 00 değilse hata mesajı veriyor.
         LocalDateTime dateTime = appointmentSaveRequest.getDateTime();
-        System.out.println(dateTime.getMinute());
         if (dateTime.getMinute() != 0){
             return ResultHelper.error("Lütfen dakika bilgisini '00' giriniz.");
         }
@@ -98,9 +97,34 @@ public class AppointmentManager implements IAppointmentService {
     }
     @Override
     public ResultData<AppointmentResponse> update(AppointmentUpdateRequest appointmentUpdateRequest) {
+        LocalDateTime dateTime = appointmentUpdateRequest.getDateTime();
         this.get(appointmentUpdateRequest.getId());
-        Appointment updateAppointment = this.modelMapperService.forRequest().map(appointmentUpdateRequest, Appointment.class);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(this.appointmentRepo.save(updateAppointment), AppointmentResponse.class));
+        Optional<Appointment> appointmentOptional = this.findByValueForValid(
+                appointmentUpdateRequest.getDateTime(),
+                appointmentUpdateRequest.getDoctorId(),
+                appointmentUpdateRequest.getAnimalId()
+        );
+        if (appointmentOptional.isPresent()){
+            throw new DataAlreadyExistException(Msg.getEntityForMsg(Appointment.class));
+        }
+        Animal animal = this.animalService.get(appointmentUpdateRequest.getAnimalId());
+        Doctor doctor = this.doctorService.get(appointmentUpdateRequest.getDoctorId());
+
+        //Doktorun müsait günlerini liste içerisine atıyor
+        List<Doctor> doctorList =  this.doctorService.findByIdAndAvailableDateDate(appointmentUpdateRequest.getDoctorId(), LocalDate.from(dateTime));
+
+        //Oluşturulan randevular içerisinde çakışan randevuları liste içerisine atıyor.
+        List<Appointment> appointmentByDate = this.findByDateTime(dateTime);
+
+        if (doctorList.isEmpty()){
+            return ResultHelper.error("Doktor bu tarihte müsait değildir.");
+        } else if (!appointmentByDate.isEmpty()) {
+            return ResultHelper.error("Doktorun bu saatte randevusu bulunmaktadır.");
+        } else {
+            Appointment updateAppointment = this.modelMapperService.forRequest().map(appointmentUpdateRequest, Appointment.class);
+            return ResultHelper.success(this.modelMapperService.forResponse().map(this.appointmentRepo.save(updateAppointment), AppointmentResponse.class));
+        }
+
     }
     @Override
     public boolean delete(int id) {
@@ -113,19 +137,53 @@ public class AppointmentManager implements IAppointmentService {
         return this.appointmentRepo.findByDateTime(localDateTime);
     }
     @Override
-    public ResultData<List<AppointmentResponse>> findByDoctorIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate) {
+    public ResultData<List<AppointmentResponse>> findByDoctorIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
         LocalDateTime convertedEntryDate = entryDate.atStartOfDay();
         LocalDateTime convertedExitDate = exitDate.atStartOfDay().plusDays(1);
-        List<Appointment> appointmentList = this.appointmentRepo.findByDoctorIdAndDateTimeBetween(id, convertedEntryDate, convertedExitDate);
-        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponseList(appointmentList, AppointmentResponse.class);
+        Page<Appointment> appointmentList = this.appointmentRepo.findByDoctorIdAndDateTimeBetween(id, convertedEntryDate, convertedExitDate, pageable);
+        if(appointmentList.isEmpty()){
+            return ResultHelper.error(Msg.NOT_FOUND);
+        }
+        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponsePage(appointmentList, AppointmentResponse.class);
+        return ResultHelper.success(appointmentResponseList);
+    }
+
+    @Override
+    public ResultData<List<AppointmentResponse>> findByDoctorNameContainingAndDateTimeBetween(String name, LocalDate entryDate, LocalDate exitDate, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        LocalDateTime convertedEntryDate = entryDate.atStartOfDay();
+        LocalDateTime convertedExitDate = exitDate.atStartOfDay().plusDays(1);
+        Page<Appointment> appointmentList = this.appointmentRepo.findByDoctorNameContainingAndDateTimeBetween(name, convertedEntryDate, convertedExitDate, pageable);
+        if(appointmentList.isEmpty()){
+            return ResultHelper.error(Msg.NOT_FOUND);
+        }
+        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponsePage(appointmentList, AppointmentResponse.class);
         return ResultHelper.success(appointmentResponseList);
     }
     @Override
-    public ResultData<List<AppointmentResponse>> findByAnimalIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate) {
+    public ResultData<List<AppointmentResponse>> findByAnimalNameContainingAndDateTimeBetween(String name, LocalDate entryDate, LocalDate exitDate, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
         LocalDateTime convertedEntryDate = entryDate.atStartOfDay();
         LocalDateTime convertedExitDate = exitDate.atStartOfDay().plusDays(1);
-        List<Appointment> appointmentList = this.appointmentRepo.findByAnimalIdAndDateTimeBetween(id, convertedEntryDate, convertedExitDate);
-        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponseList(appointmentList, AppointmentResponse.class);
+        Page<Appointment> appointmentList = this.appointmentRepo.findByAnimalNameContainingAndDateTimeBetween(name, convertedEntryDate, convertedExitDate, pageable);
+        if(appointmentList.isEmpty()){
+            return ResultHelper.error(Msg.NOT_FOUND);
+        }
+        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponsePage(appointmentList, AppointmentResponse.class);
+        return ResultHelper.success(appointmentResponseList);
+    }
+
+    @Override
+    public ResultData<List<AppointmentResponse>> findByAnimalIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        LocalDateTime convertedEntryDate = entryDate.atStartOfDay();
+        LocalDateTime convertedExitDate = exitDate.atStartOfDay().plusDays(1);
+        Page<Appointment> appointmentList = this.appointmentRepo.findByAnimalIdAndDateTimeBetween(id, convertedEntryDate, convertedExitDate, pageable);
+        if(appointmentList.isEmpty()){
+            return ResultHelper.error(Msg.NOT_FOUND);
+        }
+        List<AppointmentResponse> appointmentResponseList = this.convert.convertToResponsePage(appointmentList, AppointmentResponse.class);
         return ResultHelper.success(appointmentResponseList);
     }
     @Override

@@ -1,7 +1,9 @@
 package com.project.vetProject.business.concretes;
 
+import com.project.vetProject.business.abstracts.IAppointmentService;
 import com.project.vetProject.business.abstracts.IReportService;
 import com.project.vetProject.core.config.modelMapper.IModelMapperService;
+import com.project.vetProject.core.exception.DataAlreadyExistException;
 import com.project.vetProject.core.exception.NotFoundException;
 import com.project.vetProject.core.result.ResultData;
 import com.project.vetProject.core.utilies.Msg;
@@ -11,12 +13,15 @@ import com.project.vetProject.dto.CursorResponse;
 import com.project.vetProject.dto.request.report.ReportSaveRequest;
 import com.project.vetProject.dto.request.report.ReportUpdateRequest;
 import com.project.vetProject.dto.response.report.ReportResponse;
+import com.project.vetProject.entity.Appointment;
 import com.project.vetProject.entity.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,10 @@ public class ReportManager implements IReportService {
     public final IModelMapperService modelMapperService;
     @Override
     public ResultData<ReportResponse> save(ReportSaveRequest reportSaveRequest) {
+        Optional<Report> reportOptional = this.reportRepo.findByAppointment(reportSaveRequest.getAppointment());
+        if (reportOptional.isPresent()) {
+            throw new DataAlreadyExistException("Appointment already exist");
+        }
         Report saveReport = this.modelMapperService.forRequest().map(reportSaveRequest, Report.class);
         return ResultHelper.created(this.modelMapperService.forResponse().map(this.reportRepo.save(saveReport), ReportResponse.class));
     }
@@ -46,7 +55,7 @@ public class ReportManager implements IReportService {
     public ResultData<ReportResponse> update(ReportUpdateRequest reportUpdateRequest) {
         this.get(reportUpdateRequest.getId());
         Report updateReport = this.modelMapperService.forRequest().map(reportUpdateRequest, Report.class);
-        return ResultHelper.created(this.modelMapperService.forResponse().map(updateReport, ReportResponse.class));
+        return ResultHelper.created(this.modelMapperService.forResponse().map(this.reportRepo.save(updateReport), ReportResponse.class));
     }
 
     @Override
@@ -61,5 +70,10 @@ public class ReportManager implements IReportService {
         Report report = this.get(id);
         Report updateReport = this.modelMapperService.forRequest().map(report, Report.class);
         return ResultHelper.success(this.modelMapperService.forResponse().map(updateReport, ReportResponse.class));
+    }
+
+    @Override
+    public Optional<Report> findByAppointment(Appointment appointment) {
+        return this.reportRepo.findByAppointment(appointment);
     }
 }

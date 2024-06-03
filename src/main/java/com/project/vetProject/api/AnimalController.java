@@ -48,15 +48,21 @@ public class AnimalController {
         this.animalService.delete(id);
         return ResultHelper.ok();
     }
-    @GetMapping("/by-name/{name}")
+    @GetMapping("/animal/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<AnimalResponse>> get(@PathVariable("name") String name){
-        return this.animalService.findByName(name);
+    public ResultData<List<AnimalResponse>> get(
+            @PathVariable("name") String name,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
+        return this.animalService.findByNameContaining(name, page, pageSize);
     }
-    @GetMapping("/customer/{id}")
+    @GetMapping("/customer/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<AnimalResponse>> getAnimalsByCustomerId(@PathVariable("id") int customerId){
-        return this.animalService.findByCustomerId(customerId);
+    public ResultData<List<AnimalResponse>> getAnimalsByCustomerId(
+            @PathVariable("name") String name,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
+        return this.animalService.findByCustomerNameContaining(name, page, pageSize);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

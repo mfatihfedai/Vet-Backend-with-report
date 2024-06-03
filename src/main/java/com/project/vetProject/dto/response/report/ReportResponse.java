@@ -14,6 +14,6 @@ public class ReportResponse {
     private int id;
     private int price;
     private String description;
-    private List<Vaccine> vaccineList;
     private Appointment appointment;
+    private List<Vaccine> vaccines;
 }

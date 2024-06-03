@@ -5,7 +5,10 @@ import com.project.vetProject.dto.CursorResponse;
 import com.project.vetProject.dto.request.report.ReportSaveRequest;
 import com.project.vetProject.dto.request.report.ReportUpdateRequest;
 import com.project.vetProject.dto.response.report.ReportResponse;
+import com.project.vetProject.entity.Appointment;
 import com.project.vetProject.entity.Report;
+
+import java.util.Optional;
 
 public interface IReportService {
     ResultData<ReportResponse> save(ReportSaveRequest reportSaveRequest);
@@ -14,4 +17,5 @@ public interface IReportService {
     ResultData<ReportResponse> update(ReportUpdateRequest reportUpdateRequest);
     boolean delete(int id);
     ResultData<ReportResponse> getById(int id);
+    Optional<Report> findByAppointment(Appointment appointment);
 }

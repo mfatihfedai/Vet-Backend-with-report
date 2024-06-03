@@ -54,6 +54,7 @@ public class AvailableDateController {
     public ResultData<AvailableDateResponse> get(@PathVariable int id){
         return this.availableDateService.getById(id);
     }
+
     @GetMapping("/doctor/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AvailableDateResponse>> getByDoctor(@PathVariable int id){

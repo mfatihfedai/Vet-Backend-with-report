@@ -1,5 +1,6 @@
 package com.project.vetProject.dto.request.availableDate;
 
+import com.project.vetProject.entity.Doctor;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,4 +18,5 @@ public class AvailableDateUpdateRequest {
     private int id;
     @NotNull(message = "Müsait gün tarihi boş olamaz")
     private LocalDate date;
+    private Doctor doctor;
 }

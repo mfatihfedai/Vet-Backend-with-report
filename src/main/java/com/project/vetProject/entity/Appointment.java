@@ -32,7 +32,7 @@ public class Appointment {
     @JoinColumn(name = "appointment_doctor_id", referencedColumnName = "doctor_id")
     private Doctor doctor;
 
-    @OneToOne(mappedBy = "appointment")
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Report report;
 }

@@ -26,7 +26,7 @@ public class Report {
     @Column(name = "report_description")
     private String description;
 
-    @OneToMany(mappedBy = "report")
+    @OneToMany(mappedBy = "report",cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Vaccine> vaccines;
 

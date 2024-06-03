@@ -16,7 +16,7 @@ public interface IVaccineService {
     Vaccine get(int id);
     ResultData<CursorResponse<VaccineResponse>> cursor(int page, int pageSize);
     ResultData<List<VaccineResponse>> findByAnimalId(int id);
-    ResultData<List<VaccineResponse>> findByDate(LocalDate entryDate, LocalDate exitDate);
+    ResultData<List<VaccineResponse>> findByDate(LocalDate entryDate, LocalDate exitDate, int page, int pageSize);
     List<Vaccine> findByCodeAndName(String code, String name);
     ResultData<VaccineResponse> update(VaccineUpdateRequest vaccineUpdateRequest);
     boolean delete(int id);

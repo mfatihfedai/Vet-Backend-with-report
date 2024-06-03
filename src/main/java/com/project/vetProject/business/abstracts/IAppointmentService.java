@@ -20,8 +20,10 @@ public interface IAppointmentService{
     ResultData<AppointmentResponse> update(AppointmentUpdateRequest appointmentUpdateRequest);
     boolean delete(int id);
     List<Appointment> findByDateTime(LocalDateTime localDateTime);
-    ResultData<List<AppointmentResponse>> findByDoctorIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate);
-    ResultData<List<AppointmentResponse>> findByAnimalIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate);
+    ResultData<List<AppointmentResponse>> findByDoctorIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate, int page, int pageSize);
+    ResultData<List<AppointmentResponse>> findByDoctorNameContainingAndDateTimeBetween(String name, LocalDate entryDate, LocalDate exitDate, int page, int pageSize);
+    ResultData<List<AppointmentResponse>> findByAnimalNameContainingAndDateTimeBetween(String name, LocalDate entryDate, LocalDate exitDate, int page, int pageSize);
+    ResultData<List<AppointmentResponse>> findByAnimalIdAndDateTimeBetween(int id, LocalDate entryDate, LocalDate exitDate, int page, int pageSize);
     Optional<Appointment> findByValueForValid(LocalDateTime dateTime, Integer doctorId, Integer animalId);
     ResultData<AppointmentResponse> getById(int id);
 }

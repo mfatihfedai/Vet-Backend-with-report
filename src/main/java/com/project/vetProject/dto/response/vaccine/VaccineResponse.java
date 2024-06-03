@@ -1,7 +1,6 @@
 package com.project.vetProject.dto.response.vaccine;
 
-import com.project.vetProject.entity.Animal;
-import com.project.vetProject.entity.Vaccine;
+import com.project.vetProject.entity.Report;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,5 @@ public class VaccineResponse {
     private LocalDate protectionStrtDate;
     private LocalDate protectionFnshDate;
     private Integer animalId;
-    private Vaccine vaccine;
+    private Report report;
 }

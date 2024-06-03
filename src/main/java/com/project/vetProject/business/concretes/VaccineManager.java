@@ -72,9 +72,10 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public ResultData<List<VaccineResponse>> findByDate(LocalDate entryDate, LocalDate exitDate) {
-        List<Vaccine> vaccineList = this.vaccineRepo.findByprotectionFnshDateBetween(entryDate, exitDate);
-        List<VaccineResponse> vaccineResponseList = this.convert.convertToResponseList(vaccineList, VaccineResponse.class);
+    public ResultData<List<VaccineResponse>> findByDate(LocalDate entryDate, LocalDate exitDate, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Vaccine> vaccineList = this.vaccineRepo.findByprotectionFnshDateBetween(entryDate, exitDate, pageable);
+        List<VaccineResponse> vaccineResponseList = this.convert.convertToResponsePage(vaccineList, VaccineResponse.class);
         return ResultHelper.success(vaccineResponseList);
     }
 
@@ -87,7 +88,7 @@ public class VaccineManager implements IVaccineService {
     public ResultData<VaccineResponse> update(VaccineUpdateRequest vaccineUpdateRequest) {
         this.get(vaccineUpdateRequest.getId());
         Vaccine updateVaccine = this.modelMapperService.forRequest().map(vaccineUpdateRequest, Vaccine.class);
-        return ResultHelper.success(this.modelMapperService.forResponse().map(updateVaccine, VaccineResponse.class));
+        return ResultHelper.success(this.modelMapperService.forResponse().map(this.vaccineRepo.save(updateVaccine), VaccineResponse.class));
     }
 
     @Override

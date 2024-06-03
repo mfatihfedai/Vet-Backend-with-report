@@ -45,8 +45,11 @@ public class CustomerController {
     }
     @GetMapping("/by-names/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<CustomerResponse>> getByName(@PathVariable("name") String name){
-        return this.customerService.findByName(name);
+    public ResultData<List<CustomerResponse>> getByName(
+            @PathVariable("name") String name,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize){
+        return this.customerService.findByName(name, page, pageSize);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

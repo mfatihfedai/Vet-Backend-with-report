@@ -59,9 +59,11 @@ public class VaccineController {
     @GetMapping("/findByDate")
     public ResultData<List<VaccineResponse>> getVaccinesByDate(
             @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate entryDate,
-            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate exitDate
+            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate exitDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
             ){
-        return this.vaccineService.findByDate(entryDate,exitDate);
+        return this.vaccineService.findByDate(entryDate,exitDate, page, pageSize);
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

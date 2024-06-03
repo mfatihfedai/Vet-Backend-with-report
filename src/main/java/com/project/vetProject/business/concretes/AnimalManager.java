@@ -63,16 +63,18 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public ResultData<List<AnimalResponse>> findByName(String name) {
-        List<Animal> animalList = this.animalRepo.findByName(name);
-        List<AnimalResponse> animalResponseList = this.convert.convertToResponseList(animalList, AnimalResponse.class);
+    public ResultData<List<AnimalResponse>> findByNameContaining(String name, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Animal> animalList = this.animalRepo.findByNameContaining(name, pageable);
+        List<AnimalResponse> animalResponseList = this.convert.convertToResponsePage(animalList, AnimalResponse.class);
         return ResultHelper.success(animalResponseList);
     }
 
     @Override
-    public ResultData<List<AnimalResponse>> findByCustomerId(int id) {
-        List<Animal> animalList = this.animalRepo.findByCustomerId(id);
-        List<AnimalResponse> animalResponseList = this.convert.convertToResponseList(animalList, AnimalResponse.class);
+    public ResultData<List<AnimalResponse>> findByCustomerNameContaining(String name, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Animal> animalList = this.animalRepo.findByCustomerNameContaining(name, pageable);
+        List<AnimalResponse> animalResponseList = this.convert.convertToResponsePage(animalList, AnimalResponse.class);
         return ResultHelper.success(animalResponseList);
     }
 

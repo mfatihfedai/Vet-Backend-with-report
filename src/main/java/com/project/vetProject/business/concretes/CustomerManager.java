@@ -72,9 +72,13 @@ public class CustomerManager implements ICustomerService {
     }
 
     @Override
-    public ResultData<List<CustomerResponse>> findByName(String name) {
-        List<Customer> customerList = this.customerRepo.findByName(name);
-        List<CustomerResponse> customerResponseList = this.convert.convertToResponseList(customerList, CustomerResponse.class);
+    public ResultData<List<CustomerResponse>> findByName(String name, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Customer> customerList = this.customerRepo.findByNameContainingIgnoreCase(name, pageable);
+        if(customerList.isEmpty()){
+            return ResultHelper.error("Customer not found");
+        }
+        List<CustomerResponse> customerResponseList = this.convert.convertToResponsePage(customerList, CustomerResponse.class);
         return ResultHelper.success(customerResponseList);
     }
 

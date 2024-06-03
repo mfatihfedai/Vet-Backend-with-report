@@ -20,4 +20,6 @@ public class AnimalResponse {
     private String color;
     private LocalDate birthday;
     private Integer customerId;
+//    private int page;
+//    private boolean hasNextPage;
 }

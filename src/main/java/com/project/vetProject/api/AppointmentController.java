@@ -59,18 +59,43 @@ public class AppointmentController {
     public ResultData<List<AppointmentResponse>> getDoctorIdAndDate(
             @PathVariable("doctorId") int id,
             @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
-            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate
+            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
     ){
-        return this.appointmentService.findByDoctorIdAndDateTimeBetween(id,entryDate,exitDate);
+        return this.appointmentService.findByDoctorIdAndDateTimeBetween(id,entryDate,exitDate, page, pageSize);
+    }
+    @GetMapping("/filterByDrNameDate/{name}")
+    public ResultData<List<AppointmentResponse>> getDoctorNameAndDate(
+            @PathVariable("name") String name,
+            @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
+            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+    ){
+        return this.appointmentService.findByDoctorNameContainingAndDateTimeBetween(name,entryDate,exitDate, page, pageSize);
+    }
+
+    @GetMapping("/filterByAnmlNameDate/{name}")
+    public ResultData<List<AppointmentResponse>> getAnimalNameAndDate(
+            @PathVariable("name") String name,
+            @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
+            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+    ){
+        return this.appointmentService.findByAnimalNameContainingAndDateTimeBetween(name,entryDate,exitDate, page, pageSize);
     }
 
     @GetMapping("/filterByAnmlDate/{animalId}")
     public ResultData<List<AppointmentResponse>> getAnimalIdAndDate(
             @PathVariable("animalId") int id,
             @RequestParam(name = "entryDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate entryDate,
-            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate
+            @RequestParam(name = "exitDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate exitDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
     ){
-        return this.appointmentService.findByAnimalIdAndDateTimeBetween(id, entryDate, exitDate);
+        return this.appointmentService.findByAnimalIdAndDateTimeBetween(id, entryDate, exitDate, page, pageSize);
     }
 
      @GetMapping("/{id}")

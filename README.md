@@ -24,7 +24,7 @@ Bu proje, bir veteriner kliniğinin işlerini yönetebilmek amacıyla geliştiri
 Proje içerisinden bazı ekran görüntüleri aşağıdadır.
 
 #### UML Diagram :
-![UMLDiagram](images/umlDiagram.png)
+![UMLDiagram](images/uml-vet-fullstack.png)
 
 #### RestApi Swagger
 ![swagger1](images/swagger1.png)
